@@ -1,22 +1,12 @@
 <?php
 include('koneksi.php');
 
-$nama=$_POST['nama'];
-$harga=$_POST['harga'];
-$satuan=$_POST['satuan'];
-$kategori=$_POST['kategori'];
-$url=$_POST['url'];
-$stok=$_POST['stok'];
+$kode = $_GET['kode'];
 
-$result = $conn->exec("INSERT INTO `input` (`kode`, `nama`, `harga`, `satuan`, `kategori`, `url`, `stok`)
- VALUES (NULL, '$nama', '$harga', '$satuan', '$kategori', '$url', '$stok');");
-
- echo $result;
- 
- if ($result==true) {
-     echo " Data berhasil tersimpan";
-     include "tampil.php";
- }else{
-     echo "Data gagal tersimpan";
- }
+$hasil = $conn->query("DELETE FROM input WHERE kode = $kode");
+if ($hasil==true) {
+    header("location:tampil.php?info=hapus");
+}else {
+    echo "Data gagal dihapus";
+}
 ?>
