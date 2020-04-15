@@ -1,22 +1,113 @@
-<?php
-include('koneksi.php');
-$kode=$_GET['kode'];
-$nama=$_POST['nama'];
-$harga=$_POST['harga'];
-$satuan=$_POST['satuan'];
-$kategori=$_POST['kategori'];
-$url=$_POST['url'];
-$stok=$_POST['stok'];
+<?php include('koneksi.php') ?>
+<!DOCTYPE html>
+<html lang="en">
 
-$result = $conn->exec("UPDATE `input`
- SET `nama` = '$nama', `harga` = '$harga', `satuan` = '$satuan', `kategori` = '$kategori', `url` = '$url', `stok` = '$stok' WHERE `input`.`kode` = $kode;");
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
 
- echo $result;
- 
- if ($result==true) {
-     echo " Data berhasil tersimpan";
-     include "tampil.php";
- }else{
-     echo "Data gagal tersimpan";
- }
-?>
+<style>
+    input{
+            border-radius: 10px;
+            background-color: #3a7524;
+            border: none;
+            color: white;
+            padding: 10px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-left: 580px;
+    }
+    .red {
+            background: red;
+            color: white;
+    }
+    .container {
+        border-radius: 10px;
+        border: 1px solid black;
+        background-color: white;
+        width: 50%;
+        padding-top: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+        padding-bottom: 15px;
+    }
+</style>
+
+<body>
+    <header align="center">
+        <h2>DATA BARANG</h2>
+    </header>
+    <br>
+    <div class="container">
+        <table class="table" id="out" align="center">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Kode Produk</th>
+                    <th>Nama Produk</th>
+                    <th>Harga</th>
+                    <th>Satuan</th>
+                    <th>Kategori Produk</th>
+                    <th>Gambar</th>
+                    <th>Stok</th>
+                    <th>Modify</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $result = $conn->query('SELECT * FROM `input`');
+
+                if (isset($_GET['notifikasi'])) {
+                    $notifikasi=$_GET['notifikasi'];
+                    if ($notifikasi=='hapus') {
+                        echo "data berhasil dihapus";
+                    }
+                }
+
+                $a=1;
+                foreach($result as $b):
+                    $img = $b['url'];
+                    echo "<tr>";
+                    
+                    echo "<td>".$a."</td>";
+                    echo "<td>"."MD-".$b['kode']."</td>";
+                    echo "<td>".$b['nama']."</td>";
+                    echo "<td>".$b['harga']."</td>";
+                    echo "<td>".$b['satuan']."</td>";
+                    echo "<td>".$b['kategori']."</td>";
+                    echo "<td>"."<img src='$img' width='150' height='150'>"."</td>";
+
+                    if ($b['stok']<5) {
+                        echo "<td class='red'>".$b['stok']."</td>";
+                    }else {
+                        echo "<td>".$b['stok']."</td>";
+                    }
+                    
+        
+                    echo "<td>";
+                    echo "<a href='delete.php?kode=".$b['kode']."'>Hapus</a>";
+                    
+                    echo "</td>";
+                    echo "<td>";
+                    echo "<a href='formupdate.php?kode=".$b['kode']."'>Edit</a>";
+                    echo "</td>";
+                    echo "</tr>";
+                    $a++;
+                endforeach;
+                ?>
+            </tbody>
+        </table>
+        <br>
+       
+            <input type="button" value="Kembali" onclick="window.location.href = 'input.php';">
+       
+    </div>
+</body>
+
+</html>
