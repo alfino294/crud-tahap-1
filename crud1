@@ -1,3 +1,14 @@
+<?php
+
+include('koneksi.php'); 
+
+$kode = $_GET['kode'];
+
+$query = $conn->query("SELECT * FROM input WHERE input.kode='$kode'");
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,18 +30,7 @@
         background-color: #ebd152;
         color: white;
     }
-    .lihat {
-        border-radius: 10px;
-        background-color: #4ef542;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin-left:20px;
-    }
+   
     .submit {
         border-radius: 10px;
         background-color: #3a7524;
@@ -66,35 +66,36 @@
 </style>
 <body>
     <div class="container">
-        <form action="insert.php" method="post" name="form_input">
+        <form action="edit.php?kode=<?=$kode?>" method="post" name="form_input">
             <div class="judul">
                 <hr>
                 <h2 align="center">FORM INPUT MASTER dan Stock DATA BARANG</h2>
                 <hr>
             </div>
             <div class="container2">
+            <?php foreach($query as $q)?>
                 <table id="form">
                     <tr>
                         <td><h4>Kode</h4></td>
                         <td>:</td>
-                        <td> -</td>
+                        <td><?php echo$kode?></td>
                     </tr>
                     <tr>
                         <td><h4>Nama Produk</h4></td>
                         <td>:</td>
-                        <td><input type="text" name="nama" id="" class="box"></td>
+                        <td><input type="text" name="nama" value="<?php echo$q['nama']?>" id="" class="box"></td>
                     </tr>
                     <tr>
                         <td><h4>Harga</h4></td>
                         <td>:</td>
-                        <td><input type="number" name="harga" id="" class="box"></td>
+                        <td><input type="number" name="harga" value="<?php echo$q['harga']?>" id="" class="box"></td>
                     </tr>
                     <tr>
                         <td> <h4>Satuan</h4> </td>
                         <td>:</td>
                         <td>
                             <select name="satuan" id="" class="box">
-                                <option value="-">Pilih</option>
+                                <option selected="selected" value="<?php echo$q['satuan']?>"><?php echo$q['satuan']?></option>
                                 <option value="Gelas">Gelas</option>
                                 <option value="Mangkok">Porsi</option>
                             </select>
@@ -105,7 +106,7 @@
                         <td>:</td>
                         <td>
                             <select name="kategori" id="" class="box">
-                                <option value="-">Pilih</option>
+                                <option selected="selected" value="<?php echo$q['kategori']?>"><?php echo$q['kategori']?></option>
                                 <option value="Makanan">Makanan</option>
                                 <option value="Minuman">Minuman</option>
                             </select>
@@ -114,17 +115,17 @@
                     <tr>
                         <td><h4>URL Gambar</h4></td>
                         <td>:</td>
-                        <td><input type="url" name="url" id="" class="box"></td>
+                        <td><input type="url" name="url"value="<?php echo$q['url']?>" id="" class="box"></td>
                     </tr>
                     <tr> <td> <h4>Stok Awal</h4></tdidth="100px">
                         <td>:</td>
-                        <td> <input type="number" name="stok" id="" class="box"> </td>
+                        <td> <input type="number" name="stok" value="<?php echo$q['stok']?>" id="" class="box"> </td>
                     </tr>
                 </table>
             </div>
           
                 <input type="submit" value="Simpan" class="submit">
-                <input type="button" value="Lihat" onclick="window.location.href = 'tampil.php';" class="lihat">
+
             
         </form>
     </div>
